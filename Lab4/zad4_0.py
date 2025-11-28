@@ -123,8 +123,6 @@ def render(time):
         # else:
         #     phi += delta_y * pix2angle
 
-
-
     if right_mouse_button_pressed:
         # skalowanie w zaleznosci od przemieszczenia myszy na osi x oraz czulosci
         scale += delta_x*scale_sens
