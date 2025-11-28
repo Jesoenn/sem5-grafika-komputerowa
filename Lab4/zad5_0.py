@@ -18,6 +18,12 @@ mouse_y_pos_old = 0
 delta_x = 0
 delta_y = 0
 
+w_pressed = 0
+s_pressed = 0
+a_pressed = 0
+d_pressed = 0
+
+
 # Wspolrzedne
 movement_sideways = 0
 movement_forward = 0
@@ -25,7 +31,7 @@ movement_speed = 2.0
 viewer = [200.0, 0.0, 0.0]
 camera_up = [0.0, 1.0, 0.0]
 camera_front = [1.0, 0.0, 0.0]
-theta = 0.0 # obrot prawo/lewo
+theta = 180.0 # obrot prawo/lewo
 phi = 0.0   # obrot gora/dol
 
 
@@ -94,16 +100,18 @@ def render(time):
 def move():
     global movement_sideways, movement_forward, movement_speed, camera_front, camera_up, viewer
 
+    movement_forward = w_pressed - s_pressed
+    movement_sideways = d_pressed - a_pressed
+
     viewer[0] += camera_front[0] * movement_speed * movement_forward
     viewer[1] += camera_front[1] * movement_speed * movement_forward
     viewer[2] += camera_front[2] * movement_speed * movement_forward
 
+    # obliczenie iloczynu wektorowego, aby otrzymac prostopadly do camera_front i camera_up
     perpendicular_vector = numpy.cross(camera_front, camera_up)
-
-
-    viewer[0] -= perpendicular_vector[0] * movement_speed * movement_sideways
-    viewer[1] -= perpendicular_vector[1] * movement_speed * movement_sideways
-    viewer[2] -= perpendicular_vector[2] * movement_speed * movement_sideways
+    viewer[0] += perpendicular_vector[0] * movement_speed * movement_sideways
+    viewer[1] += perpendicular_vector[1] * movement_speed * movement_sideways
+    viewer[2] += perpendicular_vector[2] * movement_speed * movement_sideways
 
 def move_camera():
     global camera_front, theta, phi, delta_x, delta_y
@@ -199,61 +207,33 @@ def update_viewport(window, width, height):
     glLoadIdentity()
 
 def keyboard_key_callback(window, key, scancode, action, mods):
-    global movement_sideways, movement_forward
+    global movement_sideways, movement_forward, w_pressed, s_pressed, a_pressed, d_pressed
     if key == GLFW_KEY_ESCAPE and action == GLFW_PRESS:
         glfwSetWindowShouldClose(window, GLFW_TRUE)
 
     if key == GLFW_KEY_W:
         if action == GLFW_PRESS:
-            if movement_forward == -1:  # jezeli S jest nacisniete
-                movement_forward = 0
-            else:
-                movement_forward = 1
+            w_pressed = 1
         elif action == GLFW_RELEASE:
-            if movement_forward == 1:
-                movement_forward = 0
-            elif movement_forward == 0:  # jezeli S jest nacisniete
-                movement_forward = -1
-
-    elif key == GLFW_KEY_S:
+            w_pressed = 0
+    if key == GLFW_KEY_S:
         if action == GLFW_PRESS:
-            if movement_forward == 1:   # jezeli W jest nacisniete
-                movement_forward = 0
-            else:
-                movement_forward = -1
+            s_pressed = 1
         elif action == GLFW_RELEASE:
-            if movement_forward == -1:
-                movement_forward = 0
-            elif movement_forward == 0:  # jezeli W jest nacisniete
-                movement_forward = 1
-
+            s_pressed = 0
     if key == GLFW_KEY_A:
         if action == GLFW_PRESS:
-            if movement_sideways == -1:  # jezeli D jest nacisniete
-                movement_sideways = 0
-            else:
-                movement_sideways = 1
+            a_pressed = 1
         elif action == GLFW_RELEASE:
-            if movement_sideways == 1:
-                movement_sideways = 0
-            elif movement_sideways== 0:  # jezeli D jest nacisniete
-                movement_sideways = -1
-
-    elif key == GLFW_KEY_D:
+            a_pressed = 0
+    if key == GLFW_KEY_D:
         if action == GLFW_PRESS:
-            if movement_sideways == 1:  # jezeli A jest nacisniete
-                movement_sideways = 0
-            else:
-                movement_sideways= -1
+            d_pressed = 1
         elif action == GLFW_RELEASE:
-            if movement_sideways== -1:
-                movement_sideways = 0
-            elif movement_sideways == 0:  # jezeli A jest nacisniete
-                movement_sideways = 1
+            d_pressed = 0
 
 def mouse_motion_callback(window, x_pos, y_pos):
-    global delta_x, mouse_x_pos_old, delta_y, mouse_y_pos_old, yaw, pitch, sensitivity
-
+    global delta_x, mouse_x_pos_old, delta_y, mouse_y_pos_old, sensitivity
     delta_x = x_pos - mouse_x_pos_old
     mouse_x_pos_old = x_pos
 
