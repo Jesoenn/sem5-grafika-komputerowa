@@ -37,6 +37,7 @@ def startup():
 def shutdown():
     pass
 
+# TEMP
 
 def axes():
     glBegin(GL_LINES)
