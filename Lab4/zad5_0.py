@@ -12,7 +12,7 @@ colours = []    # Wszystkie kolory
 pix2angle = 1.0
 
 # Mouse movement
-sensitivity = 0.5
+sensitivity = 1.0
 mouse_x_pos_old = 0
 mouse_y_pos_old = 0
 delta_x = 0
@@ -23,12 +23,11 @@ s_pressed = 0
 a_pressed = 0
 d_pressed = 0
 
-
 # Wspolrzedne
 movement_sideways = 0
 movement_forward = 0
 movement_speed = 2.0
-viewer = [200.0, 0.0, 0.0]
+viewer = [0.0, 0.0, 0.0]
 camera_up = [0.0, 1.0, 0.0]
 camera_front = [1.0, 0.0, 0.0]
 theta = 180.0 # obrot prawo/lewo
@@ -75,26 +74,16 @@ def axes():
 
     glEnd()
 
-def spin(angle):
-    glRotatef(angle, 1.0, 0.0, 0.0)
-    glRotatef(angle, 0.0, 1.0, 0.0)
-    glRotatef(angle, 0.0, 0.0, 1.0)
-
-
 def render(time):
-    global viewer, yaw, pitch, camera_front, camera_up
+    global viewer, camera_front, camera_up
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
     gluLookAt(viewer[0], viewer[1], viewer[2],
               viewer[0]+camera_front[0], viewer[1]+camera_front[1], viewer[2]+camera_front[2],
               camera_up[0], camera_up[1], camera_up[2])
-
     axes()
     render_pyramids()
-
-
-
     glFlush()
 
 def move():

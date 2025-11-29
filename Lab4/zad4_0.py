@@ -104,8 +104,7 @@ def render(time):
 
     if left_mouse_button_pressed:
         phi += delta_y * pix2angle
-        if phi > 360 or phi < 0:
-            phi %= 360.0
+        phi %= 360.0
 
         if 90.0 < phi < 270.0:  # jezeli kamera "odwrocona"
             theta -= delta_x * pix2angle
@@ -114,8 +113,7 @@ def render(time):
 
         #theta += delta_x * pix2angle
 
-        if theta > 360 or theta < 0: # ograniczenie stopni do 360
-            theta %= 360.0
+        theta %= 360.0
 
         # Warunek sprawdzenia thety, zeby obiekt zawsze obracal sie "do gory" przy ruchu myszka w gore
         # if 270 > theta > 90:

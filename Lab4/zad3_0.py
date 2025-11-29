@@ -95,10 +95,7 @@ def render(time):
 
     if left_mouse_button_pressed:
         theta += delta_x * pix2angle
-        # if theta > 360 or theta < -360: # ograniczenie stopni do 360
-        #     theta /= 360.0
-        if theta > 360 or theta < 0: # ograniczenie stopni do 360
-            theta %= 360.0
+        theta %= 360.0
 
         # Warunek sprawdzenia thety, zeby obiekt zawsze obracal sie "do gory" przy ruchu myszka w gore
         if 270 > theta > 90:
@@ -106,14 +103,11 @@ def render(time):
         else:
             phi += delta_y * pix2angle
 
-        if phi > 360 or phi > 0:
-            phi %= 360.0
+        phi %= 360.0
     glRotatef(theta, 0.0, 1.0, 0.0)
     glRotatef(phi, 1.0, 0.0, 0.0)   # Obrot wokol osi X (gora/dol)
-
     axes()
     example_object()
-
     glFlush()
 
 

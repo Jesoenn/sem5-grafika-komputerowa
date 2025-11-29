@@ -101,17 +101,13 @@ def render(time):
 
     if left_mouse_button_pressed:
         theta += delta_x * pix2angle
-        if theta > 360 or theta < 0: # ograniczenie stopni do 360
-            theta %= 360.0
-
+        theta %= 360.0
         # Warunek sprawdzenia thety, zeby obiekt zawsze obracal sie "do gory" przy ruchu myszka w gore
         if 270 > theta > 90:
             phi -= delta_y * pix2angle
         else:
             phi += delta_y * pix2angle
-
-        if phi > 360 or phi < 0:
-            phi %= 360.0
+        phi %= 360.0
 
     if right_mouse_button_pressed:
         # skalowanie w zaleznosci od przemieszczenia myszy na osi x oraz czulosci

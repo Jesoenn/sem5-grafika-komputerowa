@@ -106,17 +106,12 @@ def render(time):
             phi -= delta_y * pix2angle
         else:
             phi += delta_y * pix2angle
-
-        if phi > 360 or phi < 0:
-            phi %= 360.0
-
+        phi %= 360.0
         if camera_view and 90.0 < phi < 270.0:  # jezeli kamera "odwrocona"
             theta -= delta_x * pix2angle
         else:
             theta += delta_x * pix2angle
-
-        if theta > 360 or theta < 0: # ograniczenie stopni do 360
-            theta %= 360.0
+        theta %= 360.0
 
     if right_mouse_button_pressed:
         # skalowanie w zaleznosci od przemieszczenia myszy na osi x oraz czulosci
