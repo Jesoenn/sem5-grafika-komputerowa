@@ -42,6 +42,7 @@ delta_y = 0
 
 #Wektor normalny
 egg_normal = numpy.zeros((N,N,3))
+view_vectors = False
 
 #Kolor materialu
 mat_ambient = [1.0, 1.0, 1.0, 1.0]
@@ -108,6 +109,20 @@ def shutdown():
     pass
 
 def renderEgg():
+    glColor3f(1.0, 1.0, 1.0)
+
+    if view_vectors:
+        # Wizualizacja wektorow normalnych
+        glBegin(GL_LINES)
+        glColor3f(1.0, 1.0, 1.0)
+        for i in range(N):
+            for j in range(N):
+                lines = numpy.add(tab, egg_normal)
+                glVertex3f(*lines[i, j])
+                glVertex3f(*tab[i, j])
+        glEnd()
+        return
+
     glBegin(GL_TRIANGLES)
     glColor3f(1.0, 1.0, 1.0)
     for i in range(N-1):
@@ -144,18 +159,38 @@ def calc_egg_normal(u_arr, v_arr):
             tab_dv[i, j, 1] = 0.0 # y
             tab_dv[i, j, 2] = -math.pi * (90 * pow(u, 5) - 225 * pow(u, 4) + 270 * pow(u, 3) - 180 * pow(u, 2) + 45 * u) * math.cos(math.pi * v)  # z
 
+    # Obliczenie wektorow normalnych
     for u in range(N):
         for v in range(N):
             egg_normal[u][v][0] = tab_du[u][v][1] * tab_dv[u][v][2] - tab_du[u][v][2] * tab_dv[u][v][1]
             egg_normal[u][v][1] = tab_du[u][v][2] * tab_dv[u][v][0] - tab_du[u][v][0] * tab_dv[u][v][2]
             egg_normal[u][v][2] = tab_du[u][v][0] * tab_dv[u][v][1] - tab_du[u][v][1] * tab_dv[u][v][0]
 
+            # Normalizacja
             vector_length = numpy.linalg.norm(egg_normal[u][v])
             if vector_length == 0:
                 vector_length = 1
-
             for i in range(3):
                 egg_normal[u][v][i] = egg_normal[u][v][i]/vector_length
+
+    # Odwrocenie od polowy jajka
+    for i in range(int(N/2), N-1, 1):
+        for j in range(N):
+            egg_normal[i][j][0] *= -1
+            egg_normal[i][j][1] *= -1
+            egg_normal[i][j][2] *= -1
+
+    for v in range(N):
+        egg_normal[int(N/2)][v][0] = 0.0
+        egg_normal[int(N/2)][v][1] = 1.0
+        egg_normal[int(N/2)][v][2] = 0.0
+
+        egg_normal[0][v][0] = 0.0
+        egg_normal[0][v][1] = -1.0
+        egg_normal[0][v][2] = 0.0
+        egg_normal[N-1][v][0] = 0.0
+        egg_normal[N-1][v][1] = -1.0
+        egg_normal[N-1][v][2] = 0.0
 
 
 def render(time):
@@ -176,7 +211,7 @@ def render(time):
         #light_position[1][0] = 10.0 * math.cos(theta * math.pi / 180) * math.cos(phi * math.pi / 180)
         #light_position[1][1] = 10.0 * math.sin(phi * math.pi / 180)
         #light_position[1][2] = 10.0 * math.sin(theta * math.pi / 180) * math.cos(phi * math.pi / 180)
-        glLightfv(GL_LIGHT1, GL_POSITION, light_position[1])
+        #glLightfv(GL_LIGHT1, GL_POSITION, light_position[1])
     calc_egg_normal(u, v)
     # glPushMatrix()
     # glTranslatef(light_position[1][0], light_position[1][1], light_position[1][2])
@@ -245,7 +280,7 @@ def change_light():
 
 
 def keyboard_key_callback(window, key, scancode, action, mods):
-    global component, key_pressed, increase, change_index
+    global component, key_pressed, increase, change_index, view_vectors
     if key == GLFW_KEY_ESCAPE and action == GLFW_PRESS:
         glfwSetWindowShouldClose(window, GLFW_TRUE)
     elif key == GLFW_KEY_UP and action == GLFW_PRESS:
@@ -267,6 +302,9 @@ def keyboard_key_callback(window, key, scancode, action, mods):
         component = LightComponent.DIFFUSE
     elif key == GLFW_KEY_E and action == GLFW_PRESS:
         component = LightComponent.SPECULAR
+    # Widok wektorow normalnych
+    elif key == GLFW_KEY_V and action == GLFW_PRESS:
+        view_vectors = not view_vectors
 
     if action == GLFW_PRESS:
         print(f"Modyfikowanie komponentu {component}. Czy rosnaco: {increase}. Index: {change_index}")

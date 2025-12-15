@@ -144,16 +144,17 @@ def calc_egg_normal(u_arr, v_arr):
             tab_dv[i, j, 1] = 0.0 # y
             tab_dv[i, j, 2] = -math.pi * (90 * pow(u, 5) - 225 * pow(u, 4) + 270 * pow(u, 3) - 180 * pow(u, 2) + 45 * u) * math.cos(math.pi * v)  # z
 
+    # Obliczenie wektorow normalnych
     for u in range(N):
         for v in range(N):
             egg_normal[u][v][0] = tab_du[u][v][1] * tab_dv[u][v][2] - tab_du[u][v][2] * tab_dv[u][v][1]
             egg_normal[u][v][1] = tab_du[u][v][2] * tab_dv[u][v][0] - tab_du[u][v][0] * tab_dv[u][v][2]
             egg_normal[u][v][2] = tab_du[u][v][0] * tab_dv[u][v][1] - tab_du[u][v][1] * tab_dv[u][v][0]
 
+            # Normalizacja
             vector_length = numpy.linalg.norm(egg_normal[u][v])
             if vector_length == 0:
                 vector_length = 1
-
             for i in range(3):
                 egg_normal[u][v][i] = egg_normal[u][v][i]/vector_length
 
@@ -176,7 +177,7 @@ def render(time):
         #light_position[1][0] = 10.0 * math.cos(theta * math.pi / 180) * math.cos(phi * math.pi / 180)
         #light_position[1][1] = 10.0 * math.sin(phi * math.pi / 180)
         #light_position[1][2] = 10.0 * math.sin(theta * math.pi / 180) * math.cos(phi * math.pi / 180)
-        glLightfv(GL_LIGHT1, GL_POSITION, light_position[1])
+        #glLightfv(GL_LIGHT1, GL_POSITION, light_position[1])
     calc_egg_normal(u, v)
     # glPushMatrix()
     # glTranslatef(light_position[1][0], light_position[1][1], light_position[1][2])
