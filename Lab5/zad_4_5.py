@@ -174,21 +174,10 @@ def render(time):
         phi += delta_y * pix2angle
         phi %= 360
 
-        #light_position[1][0] = 10.0 * math.cos(theta * math.pi / 180) * math.cos(phi * math.pi / 180)
-        #light_position[1][1] = 10.0 * math.sin(phi * math.pi / 180)
-        #light_position[1][2] = 10.0 * math.sin(theta * math.pi / 180) * math.cos(phi * math.pi / 180)
-        #glLightfv(GL_LIGHT1, GL_POSITION, light_position[1])
     calc_egg_normal(u, v)
-    # glPushMatrix()
-    # glTranslatef(light_position[1][0], light_position[1][1], light_position[1][2])
-    # quadric = gluNewQuadric()
-    # gluQuadricDrawStyle(quadric, GLU_LINE)
-    # gluSphere(quadric, 1.5, 10, 10)
-    # gluDeleteQuadric(quadric)
-    # glPopMatrix()
 
-    glRotatef(theta, 0.0, 1.0, 0.0) # temp
-    glRotatef(phi, 1.0, 0.0, 0.0)   # temp
+    glRotatef(theta, 0.0, 1.0, 0.0)
+    glRotatef(phi, 1.0, 0.0, 0.0)
     renderEgg()
 
     glFlush()
