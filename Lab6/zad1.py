@@ -98,7 +98,6 @@ def render(time):
     glVertex3f(-5.0, 5.0, 0.0)
 
     #Trojakt 2 -> kolejnosc wierzcholkow odwrotna do wskazowek zegara -> obraz z przodu
-    # glTextCoord2f(s, t): s-> wsp.poz, t->wsp. pion
     glTexCoord2f(1.0, 0.0)
     glVertex3f(5.0, -5.0, 0.0)
     glTexCoord2f(1.0, 1.0)

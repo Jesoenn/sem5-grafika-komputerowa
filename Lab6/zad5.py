@@ -56,14 +56,13 @@ att_constant = 1.0
 att_linear = 0.05
 att_quadratic = 0.001
 
-render_wall = True
 textures = []
 
 def render_triangle(i:int, j:int, inverted=False):
     if not inverted:
-        glTexCoord2f(u[i], v[j])
+        glTexCoord2f(u[i]*2, v[j])
     else:
-        glTexCoord2f(1.0-u[j], v[i])
+        glTexCoord2f(2.0-u[i]*2, 1.0-v[j])
     glNormal(*egg_normal[i, j])
     glVertex3f(*tab[i, j])
 
@@ -236,8 +235,6 @@ def keyboard_key_callback(window, key, scancode, action, mods):
     global render_wall, texture_num
     if key == GLFW_KEY_ESCAPE and action == GLFW_PRESS:
         glfwSetWindowShouldClose(window, GLFW_TRUE)
-    elif key == GLFW_KEY_R and action == GLFW_PRESS:
-        render_wall = not render_wall
     elif key == GLFW_KEY_1 and action == GLFW_PRESS:
         change_texture(0)
     elif key == GLFW_KEY_2 and action == GLFW_PRESS:

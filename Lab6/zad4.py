@@ -69,7 +69,6 @@ def startup():
     file_names = ["tekstura.tga", "tekstura_moja.tga"]
     for i in range(len(file_names)):
         textures.append(Image.open(file_names[i]))
-    # image = Image.open("tekstura.tga")
 
     glTexImage2D(
         GL_TEXTURE_2D, 0, 3, textures[0].size[0], textures[0].size[1], 0,
@@ -122,10 +121,10 @@ def render(time):
     for i in range(walls):
         glTexCoord2f((wall_mod[i][0]+1)/2.0, (wall_mod[i][1]+1)/2.0)
         glVertex3f(5.0*wall_mod[i][0], 5.0*wall_mod[i][1], 0.0)
-        glTexCoord2f(0.5, 0.5)
-        glVertex3f(0.0, 0.0, 5.0)
         glTexCoord2f((wall_mod[(i+1)%4][0] + 1) / 2.0, (wall_mod[(i+1)%4][1] + 1) / 2.0)
         glVertex3f(5.0*wall_mod[(i+1)%4][0], 5.0*wall_mod[(i+1)%4][1], 0.0)
+        glTexCoord2f(0.5, 0.5)
+        glVertex3f(0.0, 0.0, -5.0)
 
     glEnd()
     glFlush()

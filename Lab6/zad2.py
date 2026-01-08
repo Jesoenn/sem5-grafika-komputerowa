@@ -106,17 +106,15 @@ def render(time):
     glTexCoord2f(0.0, 1.0)
     glVertex3f(-5.0, 5.0, 0.0)
 
-
-
     wall_mod = [ [-1.0,-1.0], [-1.0, 1.0], [1.0, 1.0], [1.0, -1.0], [0.0, 0.0]] # LD, LG, PG, PD, SRODEK
     walls = 4 if render_wall else 2
     for i in range(walls):
         glTexCoord2f((wall_mod[i][0]+1)/2.0, (wall_mod[i][1]+1)/2.0)
         glVertex3f(5.0*wall_mod[i][0], 5.0*wall_mod[i][1], 0.0)
-        glTexCoord2f(0.5, 0.5)
-        glVertex3f(0.0, 0.0, 5.0)
         glTexCoord2f((wall_mod[(i+1)%4][0] + 1) / 2.0, (wall_mod[(i+1)%4][1] + 1) / 2.0)
         glVertex3f(5.0*wall_mod[(i+1)%4][0], 5.0*wall_mod[(i+1)%4][1], 0.0)
+        glTexCoord2f(0.5, 0.5)
+        glVertex3f(0.0, 0.0, -5.0)
 
     glEnd()
     glFlush()
