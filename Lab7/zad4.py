@@ -30,11 +30,21 @@ def compile_shaders():
         uniform mat4 M_matrix;
         uniform mat4 V_matrix;
         uniform mat4 P_matrix;
-
+    
         out vec4 vertex_color;
-
+    
         void main(void) {
-            gl_Position = P_matrix * V_matrix * M_matrix * position;
+            float mult = (gl_InstanceID)%10;
+            float side_mov = (gl_InstanceID)/10;
+            
+            mat4 offset = mat4(
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                 mult, side_mov, 0, 1
+            );
+            
+            gl_Position = P_matrix * V_matrix * offset * M_matrix * position;
             vertex_color = color;
         }
     """
@@ -200,6 +210,8 @@ def render(time):
     glClearBufferfv(GL_COLOR, 0, [0.0, 0.0, 0.0, 1.0])
     glClearBufferfi(GL_DEPTH_STENCIL, 0, 1.0, 0)
 
+    M_matrix = glm.rotate(glm.mat4(1.0), time, glm.vec3(1.0, 1.0, 0.0))
+
     V_matrix = glm.lookAt(
         glm.vec3(4.75, 4.75, 10.0),
         glm.vec3(4.75, 4.75, 0.0),
@@ -211,19 +223,12 @@ def render(time):
     M_location = glGetUniformLocation(rendering_program, "M_matrix")
     V_location = glGetUniformLocation(rendering_program, "V_matrix")
     P_location = glGetUniformLocation(rendering_program, "P_matrix")
+
+    glUniformMatrix4fv(M_location, 1, GL_FALSE, glm.value_ptr(M_matrix))
     glUniformMatrix4fv(V_location, 1, GL_FALSE, glm.value_ptr(V_matrix))
     glUniformMatrix4fv(P_location, 1, GL_FALSE, glm.value_ptr(P_matrix))
 
-    spacing = 1.0
-    for i in range(10):
-        for j in range(10):
-            # -4.75 + i*spacing -> szer=0.5, przerw=0.5. (10*0.5+9*0.5)/2 = 4.75
-            M_matrix = glm.translate(glm.mat4(1.0), glm.vec3(i*spacing, + j*spacing, 0.0))
-            M_matrix = glm.rotate(M_matrix, time, glm.vec3(1.0, 1.0, 0.0))
-
-
-            glUniformMatrix4fv(M_location, 1, GL_FALSE, glm.value_ptr(M_matrix))
-            glDrawArrays(GL_TRIANGLES, 0, 36)
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 100)
 
 
 def update_viewport(window, width, height):
