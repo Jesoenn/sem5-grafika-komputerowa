@@ -41,7 +41,7 @@ def compile_shaders():
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
-                 mult, side_mov, 0, 1
+                mult, side_mov, 0, 1
             );
             
             gl_Position = P_matrix * V_matrix * offset * M_matrix * position;

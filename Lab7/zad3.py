@@ -221,7 +221,6 @@ def render(time):
             M_matrix = glm.translate(glm.mat4(1.0), glm.vec3(i*spacing, + j*spacing, 0.0))
             M_matrix = glm.rotate(M_matrix, time, glm.vec3(1.0, 1.0, 0.0))
 
-
             glUniformMatrix4fv(M_location, 1, GL_FALSE, glm.value_ptr(M_matrix))
             glDrawArrays(GL_TRIANGLES, 0, 36)
 

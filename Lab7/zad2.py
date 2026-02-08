@@ -87,7 +87,7 @@ def compile_shaders():
 def startup():
     global rendering_program
     global vertex_array_object
-    global vertex_buffer
+    global vertex_buffer, color_buffer
 
     print("OpenGL {}, GLSL {}\n".format(
         glGetString(GL_VERSION).decode('UTF-8').split()[0],
